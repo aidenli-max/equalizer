@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Equalizer</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: "SF Pro", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    h1 { margin-bottom: 16px; }
+    input, audio { margin: 8px 0; }
+    #eqControls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #eqControls label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 8px 0;
+    }
+    #fileLabel {
+      padding: 8px 12px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background: #222;
+      cursor: pointer;
+    }
+    input[type=range] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 200px;
+      background: transparent;
+    }
+    input[type=range]:focus { outline: none; }
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 4px; background: #555; border-radius: 2px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px; height: 12px;
+      background: #fff; border-radius: 50%; margin-top: -4px;
+    }
+    input[type=range]::-moz-range-track {
+      height: 4px; background: #555; border-radius: 2px;
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 12px; height: 12px;
+      background: #fff; border-radius: 50%; border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Equalizer</h1>
+
+  <label for="fileInput" id="fileLabel">Choose File</label>
+  <input type="file" id="fileInput" accept="audio/mp3" hidden>
+  <audio id="audioPlayer" controls></audio>
+
+  <label>
+    Master Volume:
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
+  </label>
+
+  <div id="eqControls"></div>
+
+  <script>
+    const freqs = [60,150,400,1000,2400,15000];
+    const eqControls = document.getElementById('eqControls');
+    const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const sourceNode = audioCtx.createMediaElementSource(document.getElementById('audioPlayer'));
+    const filters = freqs.map(f => {
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'peaking';
+      filter.frequency.value = f;
+      filter.Q.value = 1;
+      filter.gain.value = 0;
+      return filter;
+    });
+    const masterGain = audioCtx.createGain();
+    masterGain.gain.value = document.getElementById('volumeSlider').value;
+
+    // connect nodes
+    sourceNode.connect(filters[0]);
+    filters.reduce((prev, curr) => prev.connect(curr));
+    filters[filters.length-1].connect(masterGain);
+    masterGain.connect(audioCtx.destination);
+
+    // create sliders
+    freqs.forEach(f => {
+      const label = document.createElement('label');
+      label.textContent = `${f} Hz Gain (dB):`;
+      const input = document.createElement('input');
+      input.type = 'range';
+      input.min = -12;
+      input.max = 12;
+      input.step = 0.1;
+      input.value = 0;
+      input.addEventListener('input', () => {
+        const i = freqs.indexOf(f);
+        filters[i].gain.value = input.value;
+      });
+      label.appendChild(input);
+      eqControls.appendChild(label);
+    });
+
+    // file input logic
+    document.getElementById('fileInput').addEventListener('change', e => {
+      const file = e.target.files[0];
+      document.getElementById('fileLabel').textContent = file ? file.name : 'Choose File';
+      if (file) {
+        const audio = document.getElementById('audioPlayer');
+        audio.src = URL.createObjectURL(file);
+        audio.load();
+        audio.play();
+      }
+    });
+
+    // volume slider logic
+    document.getElementById('volumeSlider').addEventListener('input', e => {
+      masterGain.gain.value = e.target.value;
+    });
+
+    // resume audio context on play
+    document.getElementById('audioPlayer').addEventListener('play', () => {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    });
+  </script>
+</body>
+</html>

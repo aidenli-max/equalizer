@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome!</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      cursor: pointer;
+      padding: 0 20px;
+    }
+    h1 { margin: 8px 0; font-size: 24px; }
+    p { margin: 8px 0; font-size: 18px; }
+    .info {
+      max-width: 900px;
+      text-align: left;
+      margin-top: 24px;
+      line-height: 1.4;
+    }
+    .start {
+      margin-top: 45px; /* pushes this down */
+    }
+    .drum-green {
+      color: #1DB954;
+    }
+    .bass-hover {
+      position: relative;
+      cursor: pointer;
+    }
+    .video-embed {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 1.5em;
+      z-index: 10;
+      background: #000;
+      border: 2px solid #1DB954;
+      border-radius: 8px;
+      padding: 4px;
+    }
+    .drum-hover {
+      position: relative;
+      cursor: pointer;
+    }
+    .drum-hover .video-embed {
+      left: 100%;
+      top: 0;
+      transform: none;
+      min-width: 320px;
+    }
+    .video-embed.active {
+      display: block !important;
+    }
+    .cymbal-hover {
+      position: relative;
+      cursor: pointer;
+    }
+    .cymbal-hover .video-embed {
+      left: 100%;
+      top: 0;
+      transform: none;
+      min-width: 320px;
+    }
+    .piano-hover {
+      position: relative;
+      cursor: pointer;
+    }
+    .piano-hover .video-embed {
+      left: 100%;
+      top: 0;
+      transform: none;
+      min-width: 320px;
+    }
+  </style>
+</head>
+<body onclick="location.href='mp3 tutorial.html'">
+  <h1>Equalizer</h1>
+
+  <div class="info">
+    <p>Master Volume is the overall loudness of the audio. It affects all frequencies equally.</p>
+        <p>Try clicking the green instruments!</p>
+  <p><strong>60 & 150 Hz</strong> are 
+    <span class="drum-green drum-hover" id="drums-word">drums
+      <span class="video-embed" id="drums-video">
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/ZlorDMgIEws" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </span>
+    </span> and 
+    <span class="drum-green bass-hover" id="bass-word">bass
+      <span class="video-embed" id="bass-video">
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/bZTxwuJPVNA" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </span>
+  </span>. These are <span class="white-quote">"thumps"</span> and <span class="white-quote">"booms."</span></p>
+  <p><strong>400 Hz</strong> is the lead instruments like 
+    <span class="drum-green guitar-hover" id="guitars-word" style="position:relative; cursor:pointer;">guitars
+      <span class="video-embed" id="guitars-video" style="left:100%; top:0; transform:none; min-width:320px;">
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/zrQF1E2M9vI" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </span>
+    </span>, <span class="drum-green piano-hover" id="pianos-word">pianos
+      <span class="video-embed" id="pianos-video">
+  <iframe width="320" height="180" src="https://www.youtube.com/embed/Kb1uVStBTM4" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </span>
+  </span>, and <span class="white-quote">vocals</span>. This frequency is what makes it sound <span class="white-quote">"solid."</span></p>
+  <p><strong>1k & 2.4k Hz</strong> determine how <span class="white-quote">"crunchy"</span> lead instruments sound.</p>
+  <p><strong>15k Hz</strong> are the 
+    <span class="drum-green hats-hover" id="hats-word" style="position:relative; cursor:pointer;">hats
+      <span class="video-embed" id="hats-video" style="left:100%; top:0; transform:none; min-width:320px;">
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/SeNp6ejvLl8" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </span>
+    </span> and 
+    <span class="drum-green cymbal-hover" id="cymbals-word" style="position:relative; cursor:pointer;">cymbals
+      <span class="video-embed" id="cymbals-video" style="left:100%; top:0; transform:none; min-width:320px;">
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/Z43Lb5CaYjM" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </span>
+  </span>. This is the <span class="white-quote">"tst"</span> and <span class="white-quote">"tat."</span></p>
+  
+  </div>
+
+  <p class="start">Click anywhere to continue.</p>
+</body>
+<script>
+  // Toggle video visibility on click of 'bass'
+  document.addEventListener('DOMContentLoaded', function() {
+    var bassWord = document.getElementById('bass-word');
+    var bassVideo = document.getElementById('bass-video');
+    var drumsWord = document.getElementById('drums-word');
+    var drumsVideo = document.getElementById('drums-video');
+    var guitarsWord = document.getElementById('guitars-word');
+    var guitarsVideo = document.getElementById('guitars-video');
+    if (bassWord && bassVideo) {
+      bassWord.addEventListener('click', function(event) {
+        event.stopPropagation(); // Prevent body click event
+        bassVideo.classList.toggle('active');
+      });
+    }
+    if (drumsWord && drumsVideo) {
+      drumsWord.addEventListener('click', function(event) {
+        event.stopPropagation();
+        drumsVideo.classList.toggle('active');
+      });
+    }
+    if (guitarsWord && guitarsVideo) {
+      guitarsWord.addEventListener('click', function(event) {
+        event.stopPropagation();
+        guitarsVideo.classList.toggle('active');
+      });
+    }
+    var pianosWord = document.getElementById('pianos-word');
+    var pianosVideo = document.getElementById('pianos-video');
+    if (pianosWord && pianosVideo) {
+      pianosWord.addEventListener('click', function(event) {
+        event.stopPropagation();
+        pianosVideo.classList.toggle('active');
+      });
+    }
+    var cymbalsWord = document.getElementById('cymbals-word');
+    var cymbalsVideo = document.getElementById('cymbals-video');
+    if (cymbalsWord && cymbalsVideo) {
+      cymbalsWord.addEventListener('click', function(event) {
+        event.stopPropagation();
+        cymbalsVideo.classList.toggle('active');
+      });
+    }
+    var hatsWord = document.getElementById('hats-word');
+    var hatsVideo = document.getElementById('hats-video');
+    if (hatsWord && hatsVideo) {
+      hatsWord.addEventListener('click', function(event) {
+        event.stopPropagation();
+        hatsVideo.classList.toggle('active');
+      });
+    }
+  });
+</script>
+</html>
